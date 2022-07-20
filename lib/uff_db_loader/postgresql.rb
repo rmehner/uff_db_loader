@@ -2,6 +2,10 @@
 
 module UffDbLoader
   module Postgresql
+    def self.dump_extension
+      "dump"
+    end
+
     def self.dump_command_template
       "ssh %user%@%host% \"docker exec -i #{APP_NAME}_%environment%_db sh -c 'exec pg_dump --username \\$POSTGRES_USER --clean --no-owner --no-acl --format=c %database%'\" > %target%"
     end

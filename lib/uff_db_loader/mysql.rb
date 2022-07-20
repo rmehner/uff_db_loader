@@ -2,6 +2,10 @@
 
 module UffDbLoader
   module Mysql
+    def self.dump_extension
+      "sql"
+    end
+
     def self.dump_command_template
       "ssh %user%@%host% \"docker exec -i #{APP_NAME}_%environment%_db sh -c 'exec mysqldump --opt --no-tablespaces -uroot -p\"\$MYSQL_ROOT_PASSWORD\" %database%'\" > %target%"
     end

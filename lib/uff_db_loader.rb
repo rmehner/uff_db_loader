@@ -34,7 +34,7 @@ module UffDbLoader
 
     puts "⬇️  Creating dump ..."
 
-    target = File.join(DUMP_DIRECTORY, Time.now.strftime("#{APP_NAME}_#{environment}_%Y_%m_%d_%H_%M_%S.dump"))
+    target = File.join(DUMP_DIRECTORY, Time.now.strftime("#{APP_NAME}_#{environment}_%Y_%m_%d_%H_%M_%S.#{config.database_system.dump_extension}"))
     command_successful = system(dump_command(environment, target))
     raise "Command did not run succesful: #{dump_command(environment, target)}" unless command_successful
 
