@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_remote_db/version"
+require "uff_db_loader/version"
 require "configuration"
 
-module RailsRemoteDb
+module UffDbLoader
   RAILS_ROOT = Dir.pwd
   APP_NAME = RAILS_ROOT.split('/').last
   DUMP_DIRECTORY = File.join(RAILS_ROOT, 'dumps')

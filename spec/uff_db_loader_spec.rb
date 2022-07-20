@@ -1,6 +1,6 @@
-RSpec.describe RailsRemoteDb do
+RSpec.describe UffDbLoader do
   it "has a version number" do
-    expect(RailsRemoteDb::VERSION).not_to be nil
+    expect(UffDbLoader::VERSION).not_to be nil
   end
 
   it "does something useful" do

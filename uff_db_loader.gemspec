@@ -1,8 +1,8 @@
-require_relative 'lib/rails_remote_db/version'
+require_relative 'lib/uff_db_loader/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "rails_remote_db"
-  spec.version       = RailsRemoteDb::VERSION
+  spec.name          = "uff_db_loader"
+  spec.version       = UffDbLoader::VERSION
   spec.authors       = ["UFF"]
   spec.email         = ["robin@coding-robin.de"]
 
@@ -13,8 +13,8 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/rmehner/rails_remote_db"
-  spec.metadata["changelog_uri"] = "https://github.com/rmehner/rails_remote_db"
+  spec.metadata["source_code_uri"] = "https://github.com/rmehner/uff_db_loader"
+  spec.metadata["changelog_uri"] = "https://github.com/rmehner/uff_db_loader"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_remote_db/postgresql"
-require "rails_remote_db/mysql"
+require "uff_db_loader/postgresql"
+require "uff_db_loader/mysql"
 
-module RailsRemoteDb
+module UffDbLoader
   class Configuration
     attr_accessor :environments, :host, :user, :db_name, :db_system
 
@@ -22,9 +22,9 @@ module RailsRemoteDb
     def database_system
       case db_system.to_sym
       when :postgresql
-        RailsRemoteDb::Postgresql
+        UffDbLoader::Postgresql
       when :mysql
-        RailsRemoteDb::Mysql
+        UffDbLoader::Mysql
       else
         raise UnknownDatabaseSystem, 'Could not identify database system. Use `config.db_system` to configure it.'
       end

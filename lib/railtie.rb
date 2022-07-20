@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'rails_remote_db'
+require 'uff_db_loader'
 require 'rails'
 
-module RailsRemoteDb
+module UffDbLoader
   class Railtie < Rails::Railtie
-    railtie_name 'rails_remote_db'
+    railtie_name 'uff_db_loader'
 
     rake_tasks do
       path = File.expand_path(__dir__)
-      Dir.glob("#{path}/rails_remote_db/tasks/*.rake").each { |f| load f }
+      Dir.glob("#{path}/uff_db_loader/tasks/*.rake").each { |f| load f }
     end
   end
 end

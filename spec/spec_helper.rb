@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "rails_remote_db"
+require "uff_db_loader"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
