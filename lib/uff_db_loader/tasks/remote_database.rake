@@ -2,8 +2,6 @@
 
 require 'tty-prompt'
 
-raise ForbiddenEnvironmentError unless Rails.env.development?
-
 namespace :remote_database do
   desc "Dumps a remote database to #{UffDbLoader::DUMP_DIRECTORY}"
   task dump: :environment do
@@ -19,6 +17,8 @@ namespace :remote_database do
     result_file_path = UffDbLoader.dump_from(environment)
 
     puts "🤓 Reading from to #{result_file_path}"
+
+    raise ForbiddenEnvironmentError unless Rails.env.development?
 
     database_name = File.basename(result_file_path, ".*")
     ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name};")
