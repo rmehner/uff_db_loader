@@ -27,7 +27,7 @@ You can configure the gem by running the following during the initialization of 
 # frozen_string_literal: true
 
 UffDbLoader.configure do |config|
-  config.environments = ['sandbox', 'production']
+  config.environments = ['sandbox', 'production'] # default is "['staging', 'production']"
   config.user = 'Francina'
   config.host = 'host.of.yoursite'
   config.db_name = 'twotter'
