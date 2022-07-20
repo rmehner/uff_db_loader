@@ -1,21 +1,21 @@
-require_relative 'lib/opsone_rails_remote_db/version'
+require_relative 'lib/rails_remote_db/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "opsone_rails_remote_db"
-  spec.version       = OpsoneRailsRemoteDb::VERSION
+  spec.name          = "rails_remote_db"
+  spec.version       = RailsRemoteDb::VERSION
   spec.authors       = ["UFF"]
   spec.email         = ["robin@coding-robin.de"]
 
-  spec.summary       = %q{Allows to dump, download and restore databases from opsone servers.}
-  spec.description   = %q{Allows to dump, download and restore databases from opsone servers.}
+  spec.summary       = %q{Allows to dump, download and restore databases from docker servers.}
+  spec.description   = %q{Allows to dump, download and restore databases from servers with a specific docker setup, that UFF uses commonly.}
   spec.homepage      = "https://coding-robin.de"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/rmehner/opsone_rails_remote_db"
-  spec.metadata["changelog_uri"] = "https://github.com/rmehner/opsone_rails_remote_db"
+  spec.metadata["source_code_uri"] = "https://github.com/rmehner/rails_remote_db"
+  spec.metadata["changelog_uri"] = "https://github.com/rmehner/rails_remote_db"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

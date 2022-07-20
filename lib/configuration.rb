@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "opsone_rails_remote_db/postgresql"
-require "opsone_rails_remote_db/mysql"
+require "rails_remote_db/postgresql"
+require "rails_remote_db/mysql"
 
-module OpsoneRailsRemoteDb
+module RailsRemoteDb
   class Configuration
     attr_accessor :environments, :host, :user, :db_name, :db_system
 
@@ -22,9 +22,9 @@ module OpsoneRailsRemoteDb
     def database_system
       case db_system.to_sym
       when :postgresql
-        OpsoneRailsRemoteDb::Postgresql
+        RailsRemoteDb::Postgresql
       when :mysql
-        OpsoneRailsRemoteDb::Mysql
+        RailsRemoteDb::Mysql
       else
         raise UnknownDatabaseSystem, 'Could not identify database system. Use `config.db_system` to configure it.'
       end

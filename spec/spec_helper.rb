@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "opsone_rails_remote_db"
+require "rails_remote_db"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

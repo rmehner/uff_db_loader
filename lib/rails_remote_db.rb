@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "opsone_rails_remote_db/version"
+require "rails_remote_db/version"
 require "configuration"
 
-module OpsoneRailsRemoteDb
+module RailsRemoteDb
   RAILS_ROOT = Dir.pwd
   APP_NAME = RAILS_ROOT.split('/').last
   DUMP_DIRECTORY = File.join(RAILS_ROOT, 'dumps')

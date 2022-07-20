@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in opsone_rails_remote_db.gemspec
+# Specify your gem's dependencies in rails_remote_db.gemspec
 gemspec
 
 gem "rake", "~> 12.0"
