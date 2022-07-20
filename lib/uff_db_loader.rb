@@ -28,8 +28,6 @@ module UffDbLoader
   end
 
   def self.dump_from(environment)
-    raise "Invalid environment: #{environment}." unless config.environments.include?(environment)
-
     FileUtils.mkdir_p(DUMP_DIRECTORY)
 
     puts "⬇️  Creating dump ..."
