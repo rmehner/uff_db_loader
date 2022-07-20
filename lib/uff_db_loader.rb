@@ -54,6 +54,12 @@ module UffDbLoader
       .gsub("%target%", target)
   end
 
+  def self.ensure_valid_environment!(environment)
+    unless config.environments.include?(environment)
+      raise ForbiddenEnvironmentError, "Invalid environment: #{environment}."
+    end
+  end
+
   def self.restore_command(database_name, result_file_path)
     config.database_system.restore_command(database_name, result_file_path)
   end

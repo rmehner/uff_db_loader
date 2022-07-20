@@ -2,13 +2,12 @@
 
 require 'tty-prompt'
 
-raise ForbiddenEnvironmentError unless Rails.env.development?
-
 namespace :remote_database do
   desc "Dumps a remote database to #{UffDbLoader::DUMP_DIRECTORY}"
   task dump: :environment do
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
+    UffDbLoader.ensure_valid_environment!(environment)
     UffDbLoader.dump_from(environment)
   end
 
@@ -16,6 +15,7 @@ namespace :remote_database do
   task load: :environment do
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
+    UffDbLoader.ensure_valid_environment!(environment)
     result_file_path = UffDbLoader.dump_from(environment)
 
     puts "🤓 Reading from to #{result_file_path}"
