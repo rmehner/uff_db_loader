@@ -28,8 +28,8 @@ You can configure the gem by running the following during the initialization of 
 
 UffDbLoader.configure do |config|
   config.environments = ['sandbox', 'production'] # default is "['staging', 'production']"
-  config.user = 'Francina'
-  config.host = 'host.of.yoursite'
+  config.ssh_user = 'Francina'
+  config.ssh_host = 'host.of.yoursite'
   config.db_name = 'twotter'
   config.db_system = :postgresql # Possible values are 'postgresql' and 'mysql'.
 end

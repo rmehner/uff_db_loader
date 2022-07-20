@@ -48,8 +48,8 @@ module UffDbLoader
       .database_system
       .dump_command_template
       .gsub("%environment%", environment)
-      .gsub("%host%", config.host)
-      .gsub("%user%", config.user)
+      .gsub("%host%", config.ssh_host)
+      .gsub("%user%", config.ssh_user)
       .gsub("%database%", config.database)
       .gsub("%target%", target)
   end

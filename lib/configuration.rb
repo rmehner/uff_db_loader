@@ -5,18 +5,18 @@ require "uff_db_loader/mysql"
 
 module UffDbLoader
   class Configuration
-    attr_accessor :environments, :host, :user, :db_name, :db_system
+    attr_accessor :environments, :ssh_host, :ssh_user, :db_name, :db_system
 
     def initialize
       @environments = %w[staging production]
-      @host = nil
-      @user = nil
+      @ssh_host = nil
+      @ssh_user = nil
       @db_name = nil
       @db_system = nil
     end
 
     def database
-      db_name || user
+      db_name || ssh_user
     end
 
     def database_system
