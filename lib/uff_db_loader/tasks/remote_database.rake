@@ -20,7 +20,7 @@ namespace :remote_database do
 
     puts "🤓 Reading from to #{result_file_path}"
 
-    database_name = File.basename(result_file_path).gsub(".dump", "")
+    database_name = File.basename(result_file_path, ".*")
     ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name};")
 
     puts "🗂  Created database #{database_name}"
