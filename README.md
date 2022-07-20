@@ -1,8 +1,8 @@
 # OpsoneRailsRemoteDb
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/opsone_rails_remote_db`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Description
 
-TODO: Delete this and the text above, and describe your gem
+`opsone_rails_remote_db` provides rake tasks to download and import databases in rails projects with a dockerized deployment that we use in multiple projects.
 
 ## Installation
 
@@ -20,20 +20,38 @@ Or install it yourself as:
 
     $ gem install opsone_rails_remote_db
 
+## Configuration
+
+You can configure the gem by running the following during the initialization of the Rails app:
+```ruby
+# frozen_string_literal: true
+
+OpsoneRailsRemoteDb.configure do |config|
+  config.environments = ['sandbox', 'production']
+  config.user = 'Francina'
+  config.host = 'host.of.yoursite'
+  config.db_name = 'twotter'
+  config.db_system = :postgresql # Possible values are 'postgresql' and 'mysql'.
+end
+```
+For example in a file like `config/initializers/opsone_rails_remote_db.rb`.
+
+Make sure the app's database user has the superuser role. Otherwise the app will crash on startup due to missing permissions.
+
 ## Usage
 
-TODO: Write usage instructions here
+`opsone_rails_remote_db` provides `rails remote_database:dump` and `rails remote_database:load` which will prompt for a configured environment.
+`dump` will only create and download a current database dump, while `load`, will do the same and restore the database content into a new database and gives instructions on how to use it in development.
+
+
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/opsone_rails_remote_db. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/opsone_rails_remote_db/blob/master/CODE_OF_CONDUCT.md).
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/rmehner/opsone_rails_remote_db. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/rmehner/opsone_rails_remote_db/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -41,4 +59,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the OpsoneRailsRemoteDb project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/opsone_rails_remote_db/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the OpsoneRailsRemoteDb project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/rmehner/opsone_rails_remote_db/blob/master/CODE_OF_CONDUCT.md).
