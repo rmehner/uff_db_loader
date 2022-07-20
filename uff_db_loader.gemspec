@@ -3,7 +3,7 @@ require_relative 'lib/uff_db_loader/version'
 Gem::Specification.new do |spec|
   spec.name          = "uff_db_loader"
   spec.version       = UffDbLoader::VERSION
-  spec.authors       = ["UFF"]
+  spec.authors       = ["Andreas Hellwig", "Fynn Heintz", "Robin Mehner"]
   spec.email         = ["robin@coding-robin.de"]
 
   spec.summary       = %q{Allows to dump, download and restore databases from docker servers.}
