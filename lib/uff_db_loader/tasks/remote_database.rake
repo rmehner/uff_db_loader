@@ -12,7 +12,7 @@ namespace :remote_database do
     UffDbLoader.dump_from(environment)
   end
 
-  desc "Gets a dump from remote and loads it into the local Postgres"
+  desc "Gets a dump from remote and loads it into the local database"
   task load: :environment do
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
