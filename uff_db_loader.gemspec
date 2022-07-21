@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description = "Allows to dump, download and restore databases from servers with a specific docker setup, that UFF uses commonly."
   spec.homepage = "https://github.com/rmehner/uff_db_loader"
   spec.license = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
 
   spec.metadata = {
     "bug_tracker_uri" => "#{spec.homepage}/issues",
