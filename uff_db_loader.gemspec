@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.add_dependency "tty-prompt"
   spec.add_dependency "activerecord", ">= 5.2"
+  spec.add_dependency "railties", ">= 5.2"
 end
