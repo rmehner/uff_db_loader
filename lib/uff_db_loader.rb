@@ -4,16 +4,7 @@ require "uff_db_loader/version"
 require "configuration"
 
 module UffDbLoader
-  RAILS_ROOT = Dir.pwd
-  APP_NAME = RAILS_ROOT.split('/').last
-  DUMP_DIRECTORY = File.join(RAILS_ROOT, 'dumps')
-  DATABASE_CONFIG_FILE = File.join(RAILS_ROOT, 'config', 'database.yml').to_s
-
-  require "railtie" if defined?(Rails)
-
-  class << self
-    attr_accessor :config
-  end
+  require "railtie"
 
   def self.config
     @configuration ||= Configuration.new
@@ -28,11 +19,11 @@ module UffDbLoader
   end
 
   def self.dump_from(environment)
-    FileUtils.mkdir_p(DUMP_DIRECTORY)
+    FileUtils.mkdir_p(config.dumps_directory)
 
     puts "⬇️  Creating dump ..."
 
-    target = File.join(DUMP_DIRECTORY, Time.now.strftime("#{APP_NAME}_#{environment}_%Y_%m_%d_%H_%M_%S.#{config.database_system.dump_extension}"))
+    target = File.join(config.dumps_directory, Time.now.strftime("#{config.app_name}_#{environment}_%Y_%m_%d_%H_%M_%S.#{config.database_system.dump_extension}"))
     command_successful = system(dump_command(environment, target))
     raise "Command did not run succesful: #{dump_command(environment, target)}" unless command_successful
 
@@ -50,6 +41,7 @@ module UffDbLoader
       .gsub("%user%", config.ssh_user)
       .gsub("%database%", config.database)
       .gsub("%target%", target)
+      .gsub("%app_name%", config.app_name)
   end
 
   def self.ensure_valid_environment!(environment)

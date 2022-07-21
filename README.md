@@ -32,6 +32,9 @@ UffDbLoader.configure do |config|
   config.ssh_host = 'host.of.yoursite'
   config.db_name = 'twotter'
   config.db_system = :postgresql # Possible values are 'postgresql' and 'mysql'.
+  config.app_name = 'my_app' # Defaults to the Rails app name
+  config.dumps_directory = '/path/to/dumps' # Defaults to Rails.root.join('dumps')
+  config.database_config_file = 'path/to/database.yml' # Defaults to Rails.root.join('config', 'database.yml')
 end
 ```
 For example in a file like `config/initializers/uff_db_loader.rb`.

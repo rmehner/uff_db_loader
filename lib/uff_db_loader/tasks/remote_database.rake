@@ -3,7 +3,7 @@
 require 'tty-prompt'
 
 namespace :remote_database do
-  desc "Dumps a remote database to #{UffDbLoader::DUMP_DIRECTORY}"
+  desc "Dumps a remote database to #{UffDbLoader.config.dumps_directory}"
   task dump: :environment do
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
@@ -29,8 +29,9 @@ namespace :remote_database do
     raise "Command did not run succesful: #{UffDbLoader.restore_command(database_name, result_file_path)}" unless command_successful
 
     puts "✅ Succesfully loaded #{result_file_path} into #{database_name}"
+
     puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
-    puts "🆗 Go to #{UffDbLoader::DATABASE_CONFIG_FILE} and change the development database value to: #{database_name}"
+    puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{database_name}"
     puts "🧑🏾‍🏫 Don't forgot to restart the Rails server after changing the database config (`rails restart`)"
   end
 end
