@@ -13,9 +13,9 @@ module UffDbLoader
       @ssh_user = nil
       @db_name = nil
       @db_system = nil
-      @app_name = Dir.pwd.split('/').last
-      @dumps_directory = File.join(Dir.pwd, 'dumps')
-      @database_config_file = File.join(Dir.pwd, 'config', 'database.yml')
+      @app_name = Dir.pwd.split("/").last
+      @dumps_directory = File.join(Dir.pwd, "dumps")
+      @database_config_file = File.join(Dir.pwd, "config", "database.yml")
     end
 
     def database
@@ -29,7 +29,7 @@ module UffDbLoader
       when :mysql
         UffDbLoader::Mysql
       else
-        raise UnknownDatabaseSystem, 'Could not identify database system. Use `config.db_system` to configure it.'
+        raise UnknownDatabaseSystem, "Could not identify database system. Use `config.db_system` to configure it."
       end
     end
   end

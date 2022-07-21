@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'uff_db_loader'
+require "uff_db_loader"
 
 path = File.expand_path(__dir__)
 Dir.glob("#{path}/tasks/*.rake").each { |f| import f }
