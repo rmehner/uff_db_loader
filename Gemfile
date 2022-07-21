@@ -5,5 +5,5 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in uff_db_loader.gemspec
 gemspec
 
-gem "rake", "~> 12.0"
+gem "rake", "~> 13.0"
 gem "rspec", "~> 3.0"
