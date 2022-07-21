@@ -7,7 +7,7 @@ module UffDbLoader
     end
 
     def self.dump_command_template
-      "ssh %user%@%host% \"docker exec -i #{APP_NAME}_%environment%_db sh -c 'exec mysqldump --opt --no-tablespaces -uroot -p\"\$MYSQL_ROOT_PASSWORD\" %database%'\" > %target%"
+      "ssh %user%@%host% \"docker exec -i #{APP_NAME}_%environment%_db sh -c 'exec mysqldump --opt --no-tablespaces -uroot -p\"\\$MYSQL_ROOT_PASSWORD\" %database%'\" > %target%"
     end
 
     def self.restore_command(database_name, result_file_path)
