@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'tty-prompt'
+require "tty-prompt"
 
 namespace :remote_database do
   desc "Dumps a remote database to #{UffDbLoader.config.dumps_directory}"
