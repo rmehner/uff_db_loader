@@ -13,7 +13,7 @@ module UffDbLoader
       @ssh_user = nil
       @db_name = nil
       @db_system = nil
-      @app_name = ''
+      @app_name = Dir.pwd.split('/').last
       @dumps_directory = File.join(Dir.pwd, 'dumps')
       @database_config_file = File.join(Dir.pwd, 'config', 'database.yml')
     end
