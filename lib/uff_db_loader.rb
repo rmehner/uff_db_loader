@@ -62,6 +62,21 @@ module UffDbLoader
     config.database_system.restore_command(database_name, result_file_path)
   end
 
+  def self.prune_dump_directory
+    FileUtils.rm_rf("#{config.dumps_directory}/.", secure: true)
+  end
+
+  def self.drop_database(database_name)
+    config.database_system.drop_database(database_name)
+  end
+
+  def self.databases
+    lines = config.database_system.list_databases(config.db_name)
+    lines.split("\n").map(&:strip).select do |line|
+      line =~ /#{config.app_name}_(#{config.environments.join("|")})_(\d|_)+/
+    end
+  end
+
   class ForbiddenEnvironmentError < StandardError; end
 
   class UnknownDatabaseSystem < StandardError; end

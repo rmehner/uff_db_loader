@@ -34,4 +34,15 @@ namespace :remote_database do
     puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{database_name}"
     puts "🧑🏾‍🏫 Don't forgot to restart the Rails server after changing the database config (`rails restart`)"
   end
+
+  desc 'Remove obsolete databases'
+  task prune: :environment do
+    UffDbLoader.databases.each do |database_name|
+      puts "Dropping #{database_name}"
+      UffDbLoader.drop_database(database_name)
+    end
+
+    puts "Removing dumps from #{UffDbLoader.config.dumps_directory}"
+    UffDbLoader.prune_dump_directory
+  end
 end
