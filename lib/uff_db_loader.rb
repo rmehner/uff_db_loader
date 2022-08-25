@@ -67,12 +67,11 @@ module UffDbLoader
   end
 
   def self.drop_database(database_name)
-    config.database_system.drop_database(database_name)
+    ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{database_name};")
   end
 
   def self.databases
-    lines = config.database_system.list_databases(config.db_name)
-    lines.split("\n").map(&:strip).select do |line|
+    config.database_system.list_databases(config.db_name).select do |line|
       line =~ /#{config.app_name}_(#{config.environments.join("|")})_(\d|_)+/
     end
   end
