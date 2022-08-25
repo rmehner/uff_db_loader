@@ -22,11 +22,11 @@ module UffDbLoader
         .flatten
     end
 
-    def self.create_database
+    def self.create_database(database_name)
       ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name};")
     end
 
-    def self.drop_database
+    def self.drop_database(database_name)
       ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{database_name};")
     end
   end
