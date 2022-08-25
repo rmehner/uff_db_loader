@@ -30,9 +30,14 @@ namespace :uff_db_loader do
 
     puts "✅ Succesfully loaded #{result_file_path} into #{database_name}"
 
-    puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
-    puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{database_name}"
-    puts "🧑🏾‍🏫 Don't forgot to restart the Rails server after changing the database config (`rails restart`)"
+    if UffDbLoader.replace_database_name_in_config(database_name)
+      system("bin/rails restart")
+      puts "🤖 Updated #{UffDbLoader.config.database_config_file} and restarted the rails server. Happy hacking, beep boop!"
+    else
+      puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
+      puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{database_name}"
+      puts "🧑🏾‍🏫 Don't forgot to restart the Rails server after changing the database config (`rails restart`)"
+    end
   end
 
   desc "Delete all downloaded db dumps and emove all databases created by UffDbLoader"

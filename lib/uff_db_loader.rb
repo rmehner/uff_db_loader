@@ -80,6 +80,16 @@ module UffDbLoader
     end
   end
 
+  def self.replace_database_name_in_config(new_database_name)
+    old_database_name = Rails.configuration.database_configuration["development"]["database"]
+
+    return false if old_database_name.nil?
+
+    old_config = File.read(UffDbLoader.config.database_config_file)
+    new_config = old_config.sub(old_database_name, new_database_name)
+    File.write(UffDbLoader.config.database_config_file, new_config)
+  end
+
   class ForbiddenEnvironmentError < StandardError; end
 
   class UnknownDatabaseSystem < StandardError; end
