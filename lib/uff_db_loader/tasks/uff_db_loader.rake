@@ -49,6 +49,20 @@ namespace :uff_db_loader do
     UffDbLoader.load_dump_into_database(database_name)
   end
 
+  desc "Switches to an existing database"
+  task switch: :environment do
+    UffDbLoader.ensure_installation!
+
+    prompt = TTY::Prompt.new
+    databases = UffDbLoader.databases
+    new_database = prompt.select("Which database do you want to switch to?", databases)
+
+    UffDbLoader.remember_database_name(new_database)
+    system("bin/rails restart")
+
+    puts "♻️  Restarted rails server with new database."
+  end
+
   desc "Delete all downloaded db dumps and remove all databases created by UffDbLoader"
   task prune: :environment do
     UffDbLoader.databases.each do |database_name|
