@@ -14,7 +14,7 @@ module UffDbLoader
       "mysql -uroot #{database_name} < #{result_file_path}"
     end
 
-    def self.list_databases(rolename)
+    def self.list_databases
       # My best guess so far:
       # ActiveRecord::Base.connection.execute('SHOW DATABASES').values.flatten
 

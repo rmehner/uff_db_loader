@@ -75,7 +75,7 @@ module UffDbLoader
   end
 
   def self.databases
-    config.database_system.list_databases(config.db_name).select do |line|
+    config.database_system.list_databases.select do |line|
       line =~ /#{config.app_name}_(#{config.environments.join("|")})_(\d|_)+/
     end
   end

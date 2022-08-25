@@ -14,10 +14,10 @@ module UffDbLoader
       "pg_restore --username postgres --clean --if-exists --no-owner --no-acl --dbname #{database_name} #{result_file_path}"
     end
 
-    def self.list_databases(rolename)
+    def self.list_databases
       ActiveRecord::Base
         .connection
-        .execute("SELECT datname FROM pg_database JOIN pg_authid ON pg_database.datdba = pg_authid.oid WHERE rolname = '#{rolename}';")
+        .execute("SELECT datname FROM pg_database;")
         .values
         .flatten
     end
