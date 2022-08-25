@@ -100,7 +100,7 @@ module UffDbLoader
 
   def self.current_database_name
     File.read(database_name_file).strip.presence
-  rescue IO::Error, Errno::ENOENT => e
+  rescue IOError, Errno::ENOENT => e
     puts "Could not read #{database_name_file}. #{e.message}"
   end
 
@@ -112,6 +112,32 @@ module UffDbLoader
     unless File.read(UffDbLoader.config.database_config_file).include?("UffDbLoader.current_database_name")
       raise InstallationDidNotRunError, "Please run bin/rails uff_db_loader:install"
     end
+  end
+
+  def self.dump_file_path(database_name)
+    File.join(
+      config.dumps_directory,
+      "#{database_name}.#{config.database_system.dump_extension}"
+    )
+  end
+
+  def self.load_dump_into_database(database_name)
+    UffDbLoader.drop_database(database_name)
+    UffDbLoader.create_database(database_name)
+
+    puts "🗂  Created database #{database_name}"
+
+    dump_file_path = dump_file_path(database_name)
+
+    command_successful = system(restore_command(database_name, dump_file_path))
+    raise "Command did not run succesful: #{restore_command(database_name, dump_file_path)}" unless command_successful
+
+    puts "✅ Succesfully loaded #{dump_file_path} into #{database_name}"
+
+    remember_database_name(database_name)
+    system("bin/rails restart")
+
+    puts "♻️  Restarted rails server with new database."
   end
 
   class ForbiddenEnvironmentError < StandardError; end
