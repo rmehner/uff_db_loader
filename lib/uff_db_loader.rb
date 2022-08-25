@@ -41,7 +41,7 @@ module UffDbLoader
   end
 
   def self.create_database(database_name)
-    ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name};")
+    config.database_system.create_database(database_name)
   end
 
   def self.dump_command(environment, target)
@@ -71,7 +71,7 @@ module UffDbLoader
   end
 
   def self.drop_database(database_name)
-    ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{database_name};")
+    config.database_system.drop_database(database_name)
   end
 
   def self.databases
