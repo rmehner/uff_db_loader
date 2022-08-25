@@ -5,6 +5,8 @@ require "tty-prompt"
 namespace :uff_db_loader do
   desc "Install uff_db_loader"
   task install: :environment do
+    UffDbLoader.remember_database_name("") # ensure database file exists
+
     if UffDbLoader.setup_dynamic_database_name_in_config
       puts "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
     else
