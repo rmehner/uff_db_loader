@@ -9,7 +9,7 @@ namespace :uff_db_loader do
       puts "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
     else
       puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
-      puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{UffDbLoader.database_name_template('default_database_name')}"
+      puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{UffDbLoader.database_name_template("default_database_name")}"
     end
   end
 
