@@ -10,6 +10,10 @@ module UffDbLoader
     @configuration ||= Configuration.new
   end
 
+  def self.database_name_file
+    Rails.root.join("tmp", "uff_db_loader_database_name")
+  end
+
   def self.reset
     @configuration = Configuration.new
   end
@@ -80,17 +84,39 @@ module UffDbLoader
     end
   end
 
-  def self.replace_database_name_in_config(new_database_name)
+  def self.database_name_template(old_database_name)
+    "<%= UffDbLoader.current_database_name || '#{old_database_name}' %>"
+  end
+
+  def self.setup_dynamic_database_name_in_config
     old_database_name = Rails.configuration.database_configuration["development"]["database"]
 
     return false if old_database_name.nil?
 
     old_config = File.read(UffDbLoader.config.database_config_file)
-    new_config = old_config.sub(old_database_name, new_database_name)
+    new_config = old_config.sub(old_database_name, database_name_template(old_database_name))
     File.write(UffDbLoader.config.database_config_file, new_config)
+  end
+
+  def self.current_database_name
+    File.read(database_name_file).strip.presence
+  rescue IO::Error, Errno::ENOENT => e
+    puts "Could not read #{database_name_file}. #{e.message}"
+  end
+
+  def self.remember_database_name(database_name)
+    File.write(database_name_file, database_name)
+  end
+
+  def self.ensure_installation!
+    unless File.read(UffDbLoader.config.database_config_file).include?("UffDbLoader.current_database_name")
+      raise InstallationDidNotRunError, "Please run bin/rails uff_db_loader:install"
+    end
   end
 
   class ForbiddenEnvironmentError < StandardError; end
 
   class UnknownDatabaseSystem < StandardError; end
+
+  class InstallationDidNotRunError < StandardError; end
 end

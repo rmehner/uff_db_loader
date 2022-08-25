@@ -3,6 +3,16 @@
 require "tty-prompt"
 
 namespace :uff_db_loader do
+  desc "Install uff_db_loader"
+  task install: :environment do
+    if UffDbLoader.setup_dynamic_database_name_in_config
+      puts "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
+    else
+      puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
+      puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{UffDbLoader.database_name_template("default_database_name")}"
+    end
+  end
+
   desc "Dumps a remote database to #{UffDbLoader.config.dumps_directory}"
   task dump: :environment do
     prompt = TTY::Prompt.new
@@ -13,6 +23,8 @@ namespace :uff_db_loader do
 
   desc "Gets a dump from remote and loads it into the local database"
   task load: :environment do
+    UffDbLoader.ensure_installation!
+
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
     UffDbLoader.ensure_valid_environment!(environment)
@@ -30,14 +42,10 @@ namespace :uff_db_loader do
 
     puts "✅ Succesfully loaded #{result_file_path} into #{database_name}"
 
-    if UffDbLoader.replace_database_name_in_config(database_name)
-      system("bin/rails restart")
-      puts "🤖 Updated #{UffDbLoader.config.database_config_file} and restarted the rails server. Happy hacking, beep boop!"
-    else
-      puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
-      puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{database_name}"
-      puts "🧑🏾‍🏫 Don't forgot to restart the Rails server after changing the database config (`rails restart`)"
-    end
+    UffDbLoader.remember_database_name(database_name)
+    system("bin/rails restart")
+
+    puts "♻️ Restarted rails server with new database."
   end
 
   desc "Delete all downloaded db dumps and emove all databases created by UffDbLoader"
