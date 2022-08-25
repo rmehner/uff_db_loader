@@ -15,15 +15,7 @@ module UffDbLoader
     end
 
     def self.list_databases
-      # My best guess so far:
-      # ActiveRecord::Base.connection.execute('SHOW DATABASES').values.flatten
-
-      # Psql for reference
-      # ActiveRecord::Base
-      #   .connection
-      #   .execute("SELECT datname FROM pg_database JOIN pg_authid ON pg_database.datdba = pg_authid.oid WHERE rolname = '#{rolename}';")
-      #   .values
-      #   .flatten
+      ActiveRecord::Base.connection.execute("SHOW DATABASES;").to_a.flatten
     end
 
     def self.create_database
