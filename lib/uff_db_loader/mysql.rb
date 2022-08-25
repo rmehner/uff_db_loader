@@ -14,6 +14,18 @@ module UffDbLoader
       "mysql -uroot #{database_name} < #{result_file_path}"
     end
 
+    def self.list_databases(rolename)
+      # My best guess so far:
+      # ActiveRecord::Base.connection.execute('SHOW DATABASES').values.flatten
+
+      # Psql for reference
+      # ActiveRecord::Base
+      #   .connection
+      #   .execute("SELECT datname FROM pg_database JOIN pg_authid ON pg_database.datdba = pg_authid.oid WHERE rolname = '#{rolename}';")
+      #   .values
+      #   .flatten
+    end
+
     def self.create_database
       ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name};")
     end
