@@ -102,7 +102,7 @@ module UffDbLoader
     database_name = File.read(database_name_file).strip
     return if database_name.blank?
     database_name
-  rescue IO::Error, Errno::ENOENT => e
+  rescue IOError, Errno::ENOENT => e
     puts "Could not read #{database_name_file}. #{e.message}"
   end
 
