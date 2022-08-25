@@ -41,6 +41,8 @@ For example in a file like `config/initializers/uff_db_loader.rb`.
 
 Make sure the app's database user has the superuser role. Otherwise the app will crash on startup due to missing permissions.
 
+If you're using mysql be sure to set the proper `MYSQL_ROOT_PASSWORD` environment variable.
+
 ## Usage
 
 `uff_db_loader` provides `rails remote_database:dump` and `rails remote_database:load` which will prompt for a configured environment.
