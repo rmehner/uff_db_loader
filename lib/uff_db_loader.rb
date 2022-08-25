@@ -116,6 +116,32 @@ module UffDbLoader
     end
   end
 
+  def self.dump_file_path(database_name)
+    File.join(
+      config.dumps_directory,
+      "#{database_name}.#{config.database_system.dump_extension}"
+    )
+  end
+
+  def self.load_dump_into_database(database_name)
+    UffDbLoader.drop_database(database_name)
+    UffDbLoader.create_database(database_name)
+
+    puts "🗂  Created database #{database_name}"
+
+    dump_file_path = dump_file_path(database_name)
+
+    command_successful = system(restore_command(database_name, dump_file_path))
+    raise "Command did not run succesful: #{restore_command(database_name, dump_file_path)}" unless command_successful
+
+    puts "✅ Succesfully loaded #{dump_file_path} into #{database_name}"
+
+    remember_database_name(database_name)
+    system("bin/rails restart")
+
+    puts "♻️  Restarted rails server with new database."
+  end
+
   class ForbiddenEnvironmentError < StandardError; end
 
   class UnknownDatabaseSystem < StandardError; end

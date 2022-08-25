@@ -35,19 +35,18 @@ namespace :uff_db_loader do
     puts "🤓 Reading from to #{result_file_path}"
 
     database_name = File.basename(result_file_path, ".*")
-    UffDbLoader.create_database(database_name)
+    UffDbLoader.load_dump_into_database(database_name)
+  end
 
-    puts "🗂  Created database #{database_name}"
+  desc "Loads an existing dump into the local database"
+  task restore: :environment do
+    UffDbLoader.ensure_installation!
 
-    command_successful = system(UffDbLoader.restore_command(database_name, result_file_path))
-    raise "Command did not run succesful: #{UffDbLoader.restore_command(database_name, result_file_path)}" unless command_successful
+    prompt = TTY::Prompt.new
+    existing_dumps = Dir.glob("#{UffDbLoader.config.dumps_directory}/#{UffDbLoader.config.app_name}*").map { |f| File.basename(f, ".*") }
+    database_name = prompt.select("Which dump should be restored?", existing_dumps)
 
-    puts "✅ Succesfully loaded #{result_file_path} into #{database_name}"
-
-    UffDbLoader.remember_database_name(database_name)
-    system("bin/rails restart")
-
-    puts "♻️ Restarted rails server with new database."
+    UffDbLoader.load_dump_into_database(database_name)
   end
 
   desc "Delete all downloaded db dumps and emove all databases created by UffDbLoader"
