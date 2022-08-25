@@ -43,7 +43,7 @@ Make sure the app's database user has the superuser role. Otherwise the app will
 
 ## Usage
 
-`uff_db_loader` provides `rails remote_database:dump` and `rails remote_database:load` which will prompt for a configured environment.
+`uff_db_loader` provides `rails uff_db_loader:dump` and `rails uff_db_loader:load` which will prompt for a configured environment.
 `dump` will only create and download a current database dump, while `load`, will do the same and restore the database content into a new database and gives instructions on how to use it in development.
 
 
