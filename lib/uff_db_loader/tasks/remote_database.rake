@@ -21,7 +21,7 @@ namespace :remote_database do
     puts "🤓 Reading from to #{result_file_path}"
 
     database_name = File.basename(result_file_path, ".*")
-    ActiveRecord::Base.connection.execute("CREATE DATABASE #{database_name};")
+    UffDbLoader.create_database(database_name)
 
     puts "🗂  Created database #{database_name}"
 
@@ -33,5 +33,16 @@ namespace :remote_database do
     puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
     puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{database_name}"
     puts "🧑🏾‍🏫 Don't forgot to restart the Rails server after changing the database config (`rails restart`)"
+  end
+
+  desc "Delete all downloaded db dumps and emove all databases created by UffDbLoader"
+  task prune: :environment do
+    UffDbLoader.databases.each do |database_name|
+      puts "Dropping #{database_name}"
+      UffDbLoader.drop_database(database_name)
+    end
+
+    puts "Removing dumps from #{UffDbLoader.config.dumps_directory}"
+    UffDbLoader.prune_dump_directory
   end
 end
