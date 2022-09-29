@@ -156,6 +156,10 @@ module UffDbLoader
     end
   end
 
+  def self.environments
+    ActiveRecord::Base.configurations.configurations.to_a.map(&:env_name) - ["test", "development"]
+  end
+
   def self.create_initializer
     template = ERB.new(
       File.read(
@@ -165,7 +169,10 @@ module UffDbLoader
 
     File.write(
       Rails.root.join("config", "initializers", "uff_db_loader.rb"),
-      template.result_with_hash({used_database_system: used_database_system})
+      template.result_with_hash(
+        used_database_system: used_database_system,
+        environments: environments
+      )
     )
   end
 
