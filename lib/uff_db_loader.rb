@@ -26,19 +26,12 @@ module UffDbLoader
     system("bin/rails restart")
   end
 
-  def self.dump_filename(environment)
-    File.join(
-      config.dumps_directory,
-      Time.now.strftime("#{config.app_name}_#{environment}_%Y_%m_%d_%H_%M_%S.#{config.database_system.dump_extension}")
-    )
-  end
-
   def self.dump_from(environment)
     FileUtils.mkdir_p(config.dumps_directory)
 
     puts "⬇️  Creating dump ..."
 
-    target = dump_filename(environment)
+    target = dump_file_path(Time.now.strftime("#{config.app_name}_#{environment}_%Y_%m_%d_%H_%M_%S)"))
 
     command_successful = system(dump_command(environment, target))
     raise "Command did not run succesful: #{dump_command(environment, target)}" unless command_successful
