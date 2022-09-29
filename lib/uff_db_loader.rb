@@ -22,6 +22,10 @@ module UffDbLoader
     yield(config)
   end
 
+  def self.restart_rails_server
+    system("bin/rails restart")
+  end
+
   def self.dump_filename(environment)
     File.join(
       config.dumps_directory,
@@ -135,7 +139,7 @@ module UffDbLoader
     puts "✅ Succesfully loaded #{dump_file_path} into #{database_name}"
 
     remember_database_name(database_name)
-    system("bin/rails restart")
+    restart_rails_server
 
     puts "♻️  Restarted rails server with new database."
   end

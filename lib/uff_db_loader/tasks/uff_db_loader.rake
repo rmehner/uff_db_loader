@@ -58,7 +58,7 @@ namespace :uff_db_loader do
     new_database = prompt.select("Which database do you want to switch to?", databases)
 
     UffDbLoader.remember_database_name(new_database)
-    system("bin/rails restart")
+    UffDbLoader.restart_rails_server
 
     puts "♻️  Restarted rails server with new database."
   end
