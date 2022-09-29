@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Allows to dump, download and restore databases from docker servers."
   spec.description = "Allows to dump, download and restore databases from servers with a specific docker setup, that UFF uses commonly."
+  spec.post_install_message = "Please run `bin/rails uff_db_loader:install` to complete the installation."
   spec.homepage = "https://github.com/rmehner/uff_db_loader"
   spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
