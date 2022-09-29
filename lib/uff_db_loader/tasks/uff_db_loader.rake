@@ -5,8 +5,6 @@ require "tty-prompt"
 namespace :uff_db_loader do
   desc "Set up UffDbLoader"
   task install: :environment do
-    # create initializer
-
     UffDbLoader.create_initializer
 
     if UffDbLoader.setup_dynamic_database_name_in_config
