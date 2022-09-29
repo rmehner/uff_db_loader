@@ -105,7 +105,7 @@ module UffDbLoader
   def self.current_database_name
     File.read(database_name_file).strip.presence
   rescue IOError, Errno::ENOENT => e
-    puts "Could not read #{database_name_file}. #{e.message}"
+    puts "Could not read #{database_name_file}. #{e.message} – Falling back to default database. 🥱"
   end
 
   def self.remember_database_name(database_name)
@@ -142,6 +142,38 @@ module UffDbLoader
     restart_rails_server
 
     puts "♻️  Restarted rails server with new database."
+  end
+
+  def self.used_database_system
+    case Rails.configuration.database_configuration["development"]["adapter"]
+    when "mysql", "mysql2", "trilogy"
+      ":mysql"
+    when "postgresql"
+      ":postgresql"
+    else
+      puts "🙃 Could not automatically determine your used database system. Please adapt in the initializer."
+      ":unknown"
+    end
+  end
+
+  def self.environments
+    ActiveRecord::Base.configurations.configurations.to_a.map(&:env_name) - ["test", "development"]
+  end
+
+  def self.initializer_path
+    File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
+  end
+
+  def self.create_initializer
+    template = ERB.new(File.read(initializer_path))
+
+    File.write(
+      Rails.root.join("config", "initializers", "uff_db_loader.rb"),
+      template.result_with_hash(
+        used_database_system: used_database_system,
+        environments: environments
+      )
+    )
   end
 
   class ForbiddenEnvironmentError < StandardError; end

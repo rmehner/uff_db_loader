@@ -8,7 +8,7 @@ module UffDbLoader
     attr_accessor :environments, :ssh_host, :ssh_user, :db_name, :db_system, :app_name, :dumps_directory, :database_config_file
 
     def initialize
-      @environments = %w[staging production]
+      @environments = nil
       @ssh_host = nil
       @ssh_user = nil
       @db_name = nil

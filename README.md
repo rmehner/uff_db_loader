@@ -29,7 +29,7 @@ Run the installation script:
 You can configure the gem by running the following during the initialization of the Rails app:
 ```ruby
 UffDbLoader.configure do |config|
-  config.environments = ['sandbox', 'production'] # default is "['staging', 'production']"
+  config.environments = ['staging', 'production']
   config.ssh_user = 'Francina'
   config.ssh_host = 'host.of.yoursite'
   config.db_name = 'twotter'

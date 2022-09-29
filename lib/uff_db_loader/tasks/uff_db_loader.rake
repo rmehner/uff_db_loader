@@ -3,9 +3,11 @@
 require "tty-prompt"
 
 namespace :uff_db_loader do
-  desc "Set up #{UffDbLoader.config.database_config_file} to be used by uff_db_loader"
+  desc "Set up UffDbLoader"
   task install: :environment do
-    UffDbLoader.remember_database_name("") # ensure database file exists
+    UffDbLoader.create_initializer
+
+    puts "👶 Created a Rails initializer file at #{UffDbLoader.initializer_path}."
 
     if UffDbLoader.setup_dynamic_database_name_in_config
       puts "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
