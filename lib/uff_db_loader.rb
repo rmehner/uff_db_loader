@@ -144,6 +144,13 @@ module UffDbLoader
     puts "♻️  Restarted rails server with new database."
   end
 
+  def self.create_initializer
+    FileUtils.cp(
+      File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.rb"),
+      Rails.root.join("config", "initializers", "uff_db_loader.rb")
+    )
+  end
+
   class ForbiddenEnvironmentError < StandardError; end
 
   class UnknownDatabaseSystem < StandardError; end
