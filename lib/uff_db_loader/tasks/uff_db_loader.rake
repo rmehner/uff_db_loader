@@ -67,7 +67,10 @@ namespace :uff_db_loader do
 
   desc "Delete all downloaded db dumps and removes all databases created by UffDbLoader"
   task prune: :environment do
+    # switch to default db so we can also drop the currently connected database
     UffDbLoader.remember_database_name("")
+    ActiveRecord::Base.connection.reconnect!
+
     UffDbLoader.databases.each do |database_name|
       puts "Dropping #{database_name}"
       UffDbLoader.drop_database(database_name)
