@@ -89,7 +89,7 @@ module UffDbLoader
   end
 
   def self.database_name_template(old_database_name)
-    "<%= UffDbLoader.current_database_name || '#{old_database_name}' %>"
+    "<%= defined?(UffDbLoader) && UffDbLoader.current_database_name || '#{old_database_name}' %>"
   end
 
   def self.setup_dynamic_database_name_in_config
