@@ -7,6 +7,8 @@ namespace :uff_db_loader do
   task install: :environment do
     UffDbLoader.create_initializer
 
+    puts "👶 Created a Rails initializer file at #{UffDbLoader.initializer_path}."
+
     if UffDbLoader.setup_dynamic_database_name_in_config
       puts "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
     else

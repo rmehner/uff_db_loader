@@ -160,12 +160,12 @@ module UffDbLoader
     ActiveRecord::Base.configurations.configurations.to_a.map(&:env_name) - ["test", "development"]
   end
 
+  def self.initializer_path
+    File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
+  end
+
   def self.create_initializer
-    template = ERB.new(
-      File.read(
-        File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
-      )
-    )
+    template = ERB.new(File.read(initializer_path))
 
     File.write(
       Rails.root.join("config", "initializers", "uff_db_loader.rb"),
