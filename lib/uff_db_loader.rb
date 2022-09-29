@@ -144,8 +144,8 @@ module UffDbLoader
     puts "♻️  Restarted rails server with new database."
   end
 
-  def self.create_initializer
-    used_database_system = case Rails.configuration.database_configuration["development"]["adapter"]
+  def self.used_database_system
+    case Rails.configuration.database_configuration["development"]["adapter"]
     when "mysql", "mysql2", "trilogy"
       ":mysql"
     when "postgresql"
@@ -154,7 +154,9 @@ module UffDbLoader
       puts "🙃 Could not automatically determine your used database system. Please adapt in the initializer."
       ":unknown"
     end
+  end
 
+  def self.create_initializer
     template = ERB.new(
       File.read(
         File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
