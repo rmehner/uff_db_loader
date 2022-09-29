@@ -6,7 +6,7 @@
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your application's `Gemfile`:
 
 ```ruby
 gem 'uff_db_loader'
@@ -20,12 +20,14 @@ Or install it yourself as:
 
     $ gem install uff_db_loader
 
+Run the installation script: 
+
+    $ bin/rails uff_db_loader:install
+
 ## Configuration
 
 You can configure the gem by running the following during the initialization of the Rails app:
 ```ruby
-# frozen_string_literal: true
-
 UffDbLoader.configure do |config|
   config.environments = ['sandbox', 'production'] # default is "['staging', 'production']"
   config.ssh_user = 'Francina'
@@ -43,10 +45,13 @@ Make sure the app's database user has the superuser role. Otherwise the app will
 
 ## Usage
 
-`uff_db_loader` provides `rails uff_db_loader:dump` and `rails uff_db_loader:load` which will prompt for a configured environment.
-`dump` will only create and download a current database dump, while `load`, will do the same and restore the database content into a new database and gives instructions on how to use it in development.
+`uff_db_loader` can be called like `bin/rails uff_db_loader:<task>` where `<task>` is one of the following:
 
-
+- `dump`: Dumps a remote database from a selected environment and downloads it
+- `restore`: Restores a dumped database locally
+- `switch`: Selects a restored local database to use
+- `load`: Dumps a remote database from a selected environment and downloads it then restores and selects the database
+- `prune`: Deletes all dumps and restored databases
 
 ## Development
 
