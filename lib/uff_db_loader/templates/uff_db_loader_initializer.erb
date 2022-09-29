@@ -7,7 +7,7 @@ if defined?(UffDbLoader)
     config.ssh_user = 'SSH_USER'
     config.ssh_host = 'HOST_OF_YOUR_SITE'
     config.db_name = 'YOUR_DATABASE_NAME'
-    config.db_system = %%DATABASE_SYSTEM%% # Possible values are :postgresql and :mysql
+    config.db_system = <%= used_database_system %> # Possible values are :postgresql and :mysql
 
     # Optional settings:
     # config.environments = ['sandbox', 'production'] # default is "['staging', 'production']"

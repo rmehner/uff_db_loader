@@ -155,11 +155,15 @@ module UffDbLoader
       ":unknown"
     end
 
-    template_contents = File.read(File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.rb"))
+    template = ERB.new(
+      File.read(
+        File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
+      )
+    )
 
     File.write(
       Rails.root.join("config", "initializers", "uff_db_loader.rb"),
-      template_contents.gsub("%%DATABASE_SYSTEM%%", used_database_system)
+      template.result_with_hash({used_database_system: used_database_system})
     )
   end
 
