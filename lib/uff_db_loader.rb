@@ -145,9 +145,21 @@ module UffDbLoader
   end
 
   def self.create_initializer
-    FileUtils.cp(
-      File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.rb"),
-      Rails.root.join("config", "initializers", "uff_db_loader.rb")
+    used_database_system = case Rails.configuration.database_configuration["development"]["adapter"]
+    when "mysql", "mysql2", "trilogy"
+      ":mysql"
+    when "postgresql"
+      ":postgresql"
+    else
+      puts "🙃 Could not automatically determine your used database system. Please adapt in the initializer."
+      ":unknown"
+    end
+
+    template_contents = File.read(File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.rb"))
+
+    File.write(
+      Rails.root.join("config", "initializers", "uff_db_loader.rb"),
+      template_contents.gsub("%%DATABASE_SYSTEM%%", used_database_system)
     )
   end
 
