@@ -28,7 +28,7 @@ module UffDbLoader
 
       puts "⬇️  Creating dump ..."
 
-      target = dump_filename(environment)
+      target = dump_file_path(Time.now.strftime("#{config.app_name}_#{environment}_%Y_%m_%d_%H_%M_%S)"))
 
       command_successful = system(dump_command(environment, target))
       raise "Command did not run succesful: #{dump_command(environment, target)}" unless command_successful
