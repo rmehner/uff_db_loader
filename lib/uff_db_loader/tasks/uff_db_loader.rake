@@ -3,7 +3,7 @@
 require "tty-prompt"
 
 namespace :uff_db_loader do
-  desc "Install uff_db_loader"
+  desc "Set up #{UffDbLoader.config.database_config_file} to be used by uff_db_loader"
   task install: :environment do
     UffDbLoader.remember_database_name("") # ensure database file exists
 
@@ -15,7 +15,7 @@ namespace :uff_db_loader do
     end
   end
 
-  desc "Dumps a remote database to #{UffDbLoader.config.dumps_directory}"
+  desc "Dumps a remote database from a selected environment to #{UffDbLoader.config.dumps_directory}"
   task dump: :environment do
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
@@ -23,7 +23,7 @@ namespace :uff_db_loader do
     UffDbLoader.dump_from(environment)
   end
 
-  desc "Loads an existing dump into the local database"
+  desc "Restores a downloaded dump into a local database"
   task restore: :environment do
     UffDbLoader.ensure_installation!
 
@@ -34,7 +34,7 @@ namespace :uff_db_loader do
     UffDbLoader.load_dump_into_database(database_name)
   end
 
-  desc "Switches to an existing database"
+  desc "Selects a restored local database to use"
   task switch: :environment do
     UffDbLoader.ensure_installation!
 
@@ -48,7 +48,7 @@ namespace :uff_db_loader do
     puts "♻️  Restarted rails server with new database."
   end
 
-  desc "Gets a dump from remote and loads it into the local database"
+  desc "Dumps a remote database from a selected environment to #{UffDbLoader.config.dumps_directory}, then restores and selects the database"
   task load: :environment do
     UffDbLoader.ensure_installation!
 
@@ -63,7 +63,7 @@ namespace :uff_db_loader do
     UffDbLoader.load_dump_into_database(database_name)
   end
 
-  desc "Delete all downloaded db dumps and remove all databases created by UffDbLoader"
+  desc "Delete all downloaded db dumps and removes all databases created by UffDbLoader"
   task prune: :environment do
     UffDbLoader.databases.each do |database_name|
       puts "Dropping #{database_name}"

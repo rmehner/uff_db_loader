@@ -48,10 +48,10 @@ Make sure the app's database user has the superuser role. Otherwise the app will
 `uff_db_loader` can be called like `bin/rails uff_db_loader:<task>` where `<task>` is one of the following:
 
 - `dump`: Dumps a remote database from a selected environment and downloads it
-- `restore`: Restores a dumped database locally
+- `restore`: Restores a downloaded dump into a local database
 - `switch`: Selects a restored local database to use
 - `load`: Dumps a remote database from a selected environment and downloads it then restores and selects the database
-- `prune`: Deletes all dumps and restored databases
+- `prune`: Delete all downloaded db dumps and removes all databases created by UffDbLoader
 
 ## Development
 
