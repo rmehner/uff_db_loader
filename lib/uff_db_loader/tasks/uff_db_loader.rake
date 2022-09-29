@@ -23,21 +23,6 @@ namespace :uff_db_loader do
     UffDbLoader.dump_from(environment)
   end
 
-  desc "Gets a dump from remote and loads it into the local database"
-  task load: :environment do
-    UffDbLoader.ensure_installation!
-
-    prompt = TTY::Prompt.new
-    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
-    UffDbLoader.ensure_valid_environment!(environment)
-    result_file_path = UffDbLoader.dump_from(environment)
-
-    puts "🤓 Reading from to #{result_file_path}"
-
-    database_name = File.basename(result_file_path, ".*")
-    UffDbLoader.load_dump_into_database(database_name)
-  end
-
   desc "Loads an existing dump into the local database"
   task restore: :environment do
     UffDbLoader.ensure_installation!
@@ -61,6 +46,21 @@ namespace :uff_db_loader do
     system("bin/rails restart")
 
     puts "♻️  Restarted rails server with new database."
+  end
+
+  desc "Gets a dump from remote and loads it into the local database"
+  task load: :environment do
+    UffDbLoader.ensure_installation!
+
+    prompt = TTY::Prompt.new
+    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
+    UffDbLoader.ensure_valid_environment!(environment)
+    result_file_path = UffDbLoader.dump_from(environment)
+
+    puts "🤓 Reading from to #{result_file_path}"
+
+    database_name = File.basename(result_file_path, ".*")
+    UffDbLoader.load_dump_into_database(database_name)
   end
 
   desc "Delete all downloaded db dumps and remove all databases created by UffDbLoader"
