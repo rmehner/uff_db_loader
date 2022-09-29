@@ -105,7 +105,7 @@ module UffDbLoader
   def self.current_database_name
     File.read(database_name_file).strip.presence
   rescue IOError, Errno::ENOENT => e
-    puts "Could not read #{database_name_file}. #{e.message}"
+    puts "Could not read #{database_name_file}. #{e.message} – Falling back to default database. 🥱"
   end
 
   def self.remember_database_name(database_name)
