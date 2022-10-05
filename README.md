@@ -20,7 +20,7 @@ Or install it yourself as:
 
     $ gem install uff_db_loader
 
-Run the installation script: 
+Run the installation script:
 
     $ bin/rails uff_db_loader:install
 
@@ -50,6 +50,7 @@ Make sure the app's database user has the superuser role. Otherwise the app will
 - `dump`: Dumps a remote database from a selected environment and downloads it
 - `restore`: Restores a downloaded dump into a local database
 - `switch`: Selects a restored local database to use
+- `switch_to_default`: Switches database back to the default development database
 - `load`: Dumps a remote database from a selected environment and downloads it then restores and selects the database
 - `prune`: Delete all downloaded db dumps and removes all databases created by UffDbLoader
 
