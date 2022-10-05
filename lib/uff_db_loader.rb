@@ -108,14 +108,14 @@ module UffDbLoader
     end
 
     def initializer_path
-      File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
+      Rails.root.join("config", "initializers", "uff_db_loader.rb")
     end
 
     def create_initializer
-      template = ERB.new(File.read(initializer_path))
+      template = ERB.new(File.read(initializer_template_path))
 
       File.write(
-        Rails.root.join("config", "initializers", "uff_db_loader.rb"),
+        initializer_path,
         template.result_with_hash(
           used_database_system: used_database_system,
           environments: environments
@@ -124,6 +124,10 @@ module UffDbLoader
     end
 
     private
+
+    def initializer_template_path
+      File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
+    end
 
     def database_name_file
       Rails.root.join("tmp", "uff_db_loader_database_name")
