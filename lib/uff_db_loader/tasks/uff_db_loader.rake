@@ -79,4 +79,12 @@ namespace :uff_db_loader do
     puts "Removing dumps from #{UffDbLoader.config.dumps_directory}"
     UffDbLoader.prune_dump_directory
   end
+
+  desc "Switch back to default database"
+  task switch_to_default: :environment do
+    UffDbLoader.remember_database_name("")
+    UffDbLoader.restart_rails_server
+
+    puts "♻️  Restarted rails server with default database."
+  end
 end
