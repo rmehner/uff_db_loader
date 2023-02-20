@@ -14,7 +14,7 @@ module UffDbLoader
       :app_name,
       :dumps_directory,
       :database_config_file,
-      :container_name_fn
+      :container_name
     )
 
     def initialize
@@ -26,7 +26,7 @@ module UffDbLoader
       @app_name = Dir.pwd.split("/").last
       @dumps_directory = File.join(Dir.pwd, "dumps")
       @database_config_file = File.join(Dir.pwd, "config", "database.yml")
-      @container_name_fn = nil
+      @container_name = nil
     end
 
     def database
