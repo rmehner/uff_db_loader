@@ -7,7 +7,7 @@ module UffDbLoader
     end
 
     def self.dump_command_template
-      "ssh %user%@%host% \"docker exec -i %app_name%_%environment%_db sh -c 'exec pg_dump --username \\$POSTGRES_USER --clean --no-owner --no-acl --format=c %database%'\" > %target%"
+      "ssh %user%@%host% \"docker exec -i %container_name% sh -c 'exec pg_dump --username \\$POSTGRES_USER --clean --no-owner --no-acl --format=c %database%'\" > %target%"
     end
 
     def self.restore_command(database_name, result_file_path)
