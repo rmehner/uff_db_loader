@@ -5,7 +5,17 @@ require "uff_db_loader/mysql"
 
 module UffDbLoader
   class Configuration
-    attr_accessor :environments, :ssh_host, :ssh_user, :db_name, :db_system, :app_name, :dumps_directory, :database_config_file
+    attr_accessor(
+      :environments,
+      :ssh_host,
+      :ssh_user,
+      :db_name,
+      :db_system,
+      :app_name,
+      :dumps_directory,
+      :database_config_file,
+      :container_name_fn
+    )
 
     def initialize
       @environments = nil
@@ -16,6 +26,7 @@ module UffDbLoader
       @app_name = Dir.pwd.split("/").last
       @dumps_directory = File.join(Dir.pwd, "dumps")
       @database_config_file = File.join(Dir.pwd, "config", "database.yml")
+      @container_name_fn = nil
     end
 
     def database

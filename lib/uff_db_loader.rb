@@ -125,6 +125,12 @@ module UffDbLoader
 
     private
 
+    def container_name(environment)
+      return "#{config.app_name}_#{environment}_db" if config.container_name_fn.blank?
+
+      config.container_name_fn.call(config.app_name, environment)
+    end
+
     def initializer_template_path
       File.join(__dir__, "uff_db_loader", "templates", "uff_db_loader_initializer.erb")
     end
@@ -144,12 +150,11 @@ module UffDbLoader
       config
         .database_system
         .dump_command_template
-        .gsub("%environment%", environment)
         .gsub("%host%", config.ssh_host)
         .gsub("%user%", config.ssh_user)
         .gsub("%database%", config.database)
         .gsub("%target%", target)
-        .gsub("%app_name%", config.app_name)
+        .gsub("%container_name%", container_name(environment))
     end
 
     def restore_command(database_name, result_file_path)
