@@ -126,9 +126,10 @@ module UffDbLoader
     private
 
     def container_name(environment)
-      return "#{config.app_name}_#{environment}_db" if config.container_name_fn.blank?
+      return "#{config.app_name}_#{environment}_db" if config.container_name.blank?
+      return config.container_name unless config.container_name.respond_to? :call
 
-      config.container_name_fn.call(config.app_name, environment)
+      config.container_name.call(config.app_name, environment)
     end
 
     def initializer_template_path
