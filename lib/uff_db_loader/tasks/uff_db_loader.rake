@@ -7,13 +7,13 @@ namespace :uff_db_loader do
   task install: :environment do
     UffDbLoader.create_initializer
 
-    puts "👶 Created a Rails initializer file at #{UffDbLoader.initializer_path}."
+    UffDbLoader.log "👶 Created a Rails initializer file at #{UffDbLoader.initializer_path}."
 
     if UffDbLoader.setup_dynamic_database_name_in_config
-      puts "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
+      UffDbLoader.log "🤖 Updated #{UffDbLoader.config.database_config_file}. Happy hacking, beep boop!"
     else
-      puts "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
-      puts "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{UffDbLoader.database_name_template("default_database_name")}"
+      UffDbLoader.log "💩 Because YAML is a wonderful format, you need to adapt your config file by hand."
+      UffDbLoader.log "🆗 Go to #{UffDbLoader.config.database_config_file} and change the development database value to: #{UffDbLoader.database_name_template("default_database_name")}"
     end
   end
 
@@ -51,7 +51,7 @@ namespace :uff_db_loader do
     UffDbLoader.remember_database_name(new_database)
     UffDbLoader.restart_rails_server
 
-    puts "♻️  Restarted rails server with new database."
+    UffDbLoader.log "♻️  Restarted rails server with new database."
   end
 
   desc "Dumps a remote database from a selected environment to #{UffDbLoader.config.dumps_directory}, then restores and selects the database"
@@ -63,7 +63,7 @@ namespace :uff_db_loader do
     UffDbLoader.ensure_valid_environment!(environment)
     result_file_path = UffDbLoader.dump_from(environment)
 
-    puts "🤓 Reading from to #{result_file_path}"
+    UffDbLoader.log "🤓 Reading from to #{result_file_path}"
 
     database_name = File.basename(result_file_path, ".*")
     UffDbLoader.load_dump_into_database(database_name)
@@ -74,11 +74,11 @@ namespace :uff_db_loader do
     UffDbLoader.databases.each do |database_name|
       next if database_name == ActiveRecord::Base.connection.current_database
 
-      puts "Dropping #{database_name}"
+      UffDbLoader.log "Dropping #{database_name}"
       UffDbLoader.drop_database(database_name)
     end
 
-    puts "Removing dumps from #{UffDbLoader.config.dumps_directory}"
+    UffDbLoader.log "Removing dumps from #{UffDbLoader.config.dumps_directory}"
     UffDbLoader.prune_dump_directory
   end
 
@@ -87,6 +87,6 @@ namespace :uff_db_loader do
     UffDbLoader.remember_database_name("")
     UffDbLoader.restart_rails_server
 
-    puts "♻️  Restarted rails server with default database."
+    UffDbLoader.log "♻️  Restarted rails server with default database."
   end
 end

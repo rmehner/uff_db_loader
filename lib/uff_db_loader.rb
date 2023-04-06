@@ -14,6 +14,10 @@ module UffDbLoader
       @configuration ||= Configuration.new
     end
 
+    def log(message)
+      puts "[UffDbLoader] #{message}"
+    end
+
     def reset
       @configuration = Configuration.new
     end
@@ -29,14 +33,14 @@ module UffDbLoader
     def dump_from(environment)
       FileUtils.mkdir_p(config.dumps_directory)
 
-      puts "⬇️  Creating dump ..."
+      log "⬇️  Creating dump ..."
 
       target = dump_file_path(Time.now.strftime("#{config.app_name}_#{environment}_#{TIMESTAMP_FORMAT}"))
 
       command_successful = system(dump_command(environment, target))
       raise "Command did not run succesful: #{dump_command(environment, target)}" unless command_successful
 
-      puts "✅ Succesfully dumped to #{target}"
+      log "✅ Succesfully dumped to #{target}"
 
       target
     end
@@ -106,19 +110,19 @@ module UffDbLoader
       UffDbLoader.drop_database(database_name)
       UffDbLoader.create_database(database_name)
 
-      puts "🗂  Created database #{database_name}"
+      log "🗂  Created database #{database_name}"
 
       dump_file_path = dump_file_path(database_name)
 
       command_successful = system(restore_command(database_name, dump_file_path))
       raise "Command did not run succesful: #{restore_command(database_name, dump_file_path)}" unless command_successful
 
-      puts "✅ Succesfully loaded #{dump_file_path} into #{database_name}"
+      log "✅ Succesfully loaded #{dump_file_path} into #{database_name}"
 
       remember_database_name(database_name)
       restart_rails_server
 
-      puts "♻️  Restarted rails server with new database."
+      log "♻️  Restarted rails server with new database."
     end
 
     def initializer_path
@@ -194,7 +198,7 @@ module UffDbLoader
       when "postgresql"
         ":postgresql"
       else
-        puts "🙃 Could not automatically determine your used database system. Please adapt in the initializer."
+        log "🙃 Could not automatically determine your used database system. Please adapt in the initializer."
         ":unknown"
       end
     end
