@@ -76,8 +76,8 @@ module UffDbLoader
 
     def current_database_name
       File.read(database_name_file).strip.presence
-    rescue IOError, Errno::ENOENT => e
-      puts "Could not read #{database_name_file}. #{e.message} – Falling back to default database. 🥱"
+    rescue IOError, Errno::ENOENT
+      # We expect this file to be missing in non-dev environments.
     end
 
     def remember_database_name(database_name)
