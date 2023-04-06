@@ -45,7 +45,9 @@ module UffDbLoader
     end
 
     def prune_dump_directory
-      FileUtils.rm_rf("#{config.dumps_directory}/.", secure: true)
+      FileUtils.rm_f(
+        FileList["#{config.dumps_directory}/*"].exclude(dump_file_path(current_database_name)).to_a
+      )
     end
 
     def create_database(database_name)
