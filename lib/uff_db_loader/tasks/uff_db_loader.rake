@@ -20,7 +20,7 @@ namespace :uff_db_loader do
   desc "Dumps a remote database from a selected environment to #{UffDbLoader.config.dumps_directory}"
   task dump: :environment do
     prompt = TTY::Prompt.new
-    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
+    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments, filter: true)
     UffDbLoader.ensure_valid_environment!(environment)
     UffDbLoader.dump_from(environment)
   end
@@ -35,7 +35,7 @@ namespace :uff_db_loader do
     ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration["development"])
 
     prompt = TTY::Prompt.new
-    database_name = prompt.select("Which dump should be restored?", UffDbLoader.dumps)
+    database_name = prompt.select("Which dump should be restored?", UffDbLoader.dumps, filter: true)
 
     UffDbLoader.load_dump_into_database(database_name)
   end
@@ -46,7 +46,7 @@ namespace :uff_db_loader do
 
     prompt = TTY::Prompt.new
     databases = UffDbLoader.databases
-    new_database = prompt.select("Which database do you want to switch to?", databases)
+    new_database = prompt.select("Which database do you want to switch to?", databases, filter: true)
 
     UffDbLoader.remember_database_name(new_database)
     UffDbLoader.restart_rails_server
@@ -59,7 +59,7 @@ namespace :uff_db_loader do
     UffDbLoader.ensure_installation!
 
     prompt = TTY::Prompt.new
-    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments)
+    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments, filter: true)
     UffDbLoader.ensure_valid_environment!(environment)
     result_file_path = UffDbLoader.dump_from(environment)
 
