@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.post_install_message = "Please run `bin/rails uff_db_loader:install` to complete the installation."
   spec.homepage = "https://github.com/rmehner/uff_db_loader"
   spec.license = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.0.0")
 
   spec.metadata = {
     "bug_tracker_uri" => "#{spec.homepage}/issues",
