@@ -35,8 +35,7 @@ namespace :uff_db_loader do
     ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration["development"])
 
     prompt = TTY::Prompt.new
-    existing_dumps = Dir.glob("#{UffDbLoader.config.dumps_directory}/#{UffDbLoader.config.app_name}*").map { |f| File.basename(f, ".*") }
-    database_name = prompt.select("Which dump should be restored?", existing_dumps)
+    database_name = prompt.select("Which dump should be restored?", UffDbLoader.dumps)
 
     UffDbLoader.load_dump_into_database(database_name)
   end

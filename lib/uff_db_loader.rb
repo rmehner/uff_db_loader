@@ -6,6 +6,9 @@ require "configuration"
 module UffDbLoader
   require "railtie"
 
+  TIMESTAMP_FORMAT = "%Y_%m_%d_%H_%M_%S"
+  TIMESTAMP_LENGTH = Time.now.strftime(TIMESTAMP_FORMAT).size
+
   class << self
     def config
       @configuration ||= Configuration.new
@@ -28,7 +31,7 @@ module UffDbLoader
 
       puts "⬇️  Creating dump ..."
 
-      target = dump_file_path(Time.now.strftime("#{config.app_name}_#{environment}_%Y_%m_%d_%H_%M_%S"))
+      target = dump_file_path(Time.now.strftime("#{config.app_name}_#{environment}_#{TIMESTAMP_FORMAT}"))
 
       command_successful = system(dump_command(environment, target))
       raise "Command did not run succesful: #{dump_command(environment, target)}" unless command_successful
@@ -59,9 +62,18 @@ module UffDbLoader
     end
 
     def databases
-      config.database_system.list_databases.select do |line|
-        line =~ /#{config.app_name}_(#{config.environments.join("|")})_(\d|_)+/
-      end
+      config.database_system.list_databases
+        .select { |line| line =~ /#{config.app_name}_(#{config.environments.join("|")})_(\d|_)+/ }
+        .sort_by { |database| database[-TIMESTAMP_LENGTH..] }
+        .reverse
+    end
+
+    def dumps
+      Dir
+        .glob("#{config.dumps_directory}/#{config.app_name}*")
+        .map { |f| File.basename(f, ".*") }
+        .sort_by { |dump| dump[-TIMESTAMP_LENGTH..] }
+        .reverse
     end
 
     def setup_dynamic_database_name_in_config
