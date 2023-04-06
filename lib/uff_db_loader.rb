@@ -200,7 +200,7 @@ module UffDbLoader
     end
 
     def environments
-      ActiveRecord::Base.configurations.configurations.to_a.map(&:env_name) - ["test", "development"]
+      ActiveRecord::Base.configurations.configurations.to_a.map(&:env_name) - ["default", "test", "development"]
     end
 
     class ForbiddenEnvironmentError < StandardError; end
