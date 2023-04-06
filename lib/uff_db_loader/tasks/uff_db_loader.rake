@@ -29,6 +29,11 @@ namespace :uff_db_loader do
   task restore: :environment do
     UffDbLoader.ensure_installation!
 
+    # switch to default db so we can restore the currently connected database
+    UffDbLoader.remember_database_name("")
+    ActiveRecord::Base.remove_connection
+    ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration["development"])
+
     prompt = TTY::Prompt.new
     existing_dumps = Dir.glob("#{UffDbLoader.config.dumps_directory}/#{UffDbLoader.config.app_name}*").map { |f| File.basename(f, ".*") }
     database_name = prompt.select("Which dump should be restored?", existing_dumps)
@@ -67,10 +72,6 @@ namespace :uff_db_loader do
 
   desc "Delete all downloaded db dumps and removes all databases created by UffDbLoader"
   task prune: :environment do
-    # switch to default db so we can also drop the currently connected database
-    UffDbLoader.remember_database_name("")
-    ActiveRecord::Base.connection.reconnect!
-
     UffDbLoader.databases.each do |database_name|
       puts "Dropping #{database_name}"
       UffDbLoader.drop_database(database_name)
