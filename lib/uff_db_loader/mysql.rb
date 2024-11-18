@@ -11,7 +11,7 @@ module UffDbLoader
     end
 
     def self.restore_command(database_name, result_file_path, config)
-      "#{File.join([config.local_mysql_cli_path, "mysql"].compact)} -uroot #{database_name} < #{result_file_path}"
+      "#{File.join([config.local_cli_path, "mysql"].compact)} -uroot #{database_name} < #{result_file_path}"
     end
 
     def self.list_databases
