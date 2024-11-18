@@ -15,5 +15,7 @@ if defined?(UffDbLoader)
     # config.dumps_directory = '/path/to/dumps' # Defaults to Rails.root.join('dumps')
     # config.database_config_file = 'path/to/database.yml' # Defaults to Rails.root.join('config', 'database.yml')
     # config.container_name = ->(app_name, environment) { "#{app_name}_#{environment}_custom_suffix" } # Defaults to "#{app_name}_#{environment}_db". It accepts a static string too.
+    # config.local_mysql_cli_path = '' # Defaults to nil. So it uses what is configured in $PATH.
+    # config.local_psql_cli_path = '' # Defaults to nil. So it uses what is configured in $PATH.
   end
 end
