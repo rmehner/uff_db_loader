@@ -38,6 +38,7 @@ UffDbLoader.configure do |config|
   config.dumps_directory = '/path/to/dumps' # Defaults to Rails.root.join('dumps')
   config.database_config_file = 'path/to/database.yml' # Defaults to Rails.root.join('config', 'database.yml')
   config.container_name = ->(app_name, environment) { "#{app_name}_#{environment}_custom_suffix" } # Defaults to "#{app_name}_#{environment}_db". It accepts a static string too.
+  config.local_restore_command_path = '' # Sets the path to the db-cli (pg_restore, mysql). Defaults to nil so it's using the default binary (mysql, pg_dump) in $PATH.
 end
 ```
 For example in a file like `config/initializers/uff_db_loader.rb`.
