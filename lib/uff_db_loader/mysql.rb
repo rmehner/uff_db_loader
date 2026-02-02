@@ -10,8 +10,12 @@ module UffDbLoader
       "ssh %user%@%host% \"docker exec -i %container_name% sh -c 'exec mysqldump --opt --single-transaction --routines --triggers --events --no-tablespaces -uroot -p\"\\$MYSQL_ROOT_PASSWORD\" %database%'\" > %target%"
     end
 
-    def self.restore_command(database_name, result_file_path, config)
-      "#{File.join(config.local_restore_command_path || "mysql")} -uroot #{database_name} < #{result_file_path}"
+    def self.restore_command_template
+      "%command% -uroot %database% < %file%"
+    end
+
+    def self.default_restore_command
+      "mysql"
     end
 
     def self.list_databases
