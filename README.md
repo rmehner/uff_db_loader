@@ -27,6 +27,7 @@ Run the installation script:
 ## Configuration
 
 You can configure the gem by running the following during the initialization of the Rails app:
+
 ```ruby
 UffDbLoader.configure do |config|
   config.environments = ['staging', 'production']
@@ -41,6 +42,7 @@ UffDbLoader.configure do |config|
   config.local_restore_command_path = '' # Sets the path to the db-cli (pg_restore, mysql). Defaults to nil so it's using the default binary (mysql, pg_dump) in $PATH.
 end
 ```
+
 For example in a file like `config/initializers/uff_db_loader.rb`.
 
 Make sure the app's database user has the superuser role. Otherwise the app will crash on startup due to missing permissions.
@@ -55,6 +57,7 @@ Make sure the app's database user has the superuser role. Otherwise the app will
 - `switch_to_default`: Switches database back to the default development database
 - `load`: Dumps a remote database from a selected environment and downloads it then restores and selects the database
 - `prune`: Delete all downloaded db dumps and removes all databases created by UffDbLoader
+- `current`: Shows the currently connected database and the one UffDbLoader has selected
 
 ## Development
 
