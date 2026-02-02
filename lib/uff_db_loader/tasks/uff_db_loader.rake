@@ -89,4 +89,15 @@ namespace :uff_db_loader do
 
     UffDbLoader.log "♻️  Restarted rails server with default database."
   end
+
+  desc "Shows the currently selected and connected database"
+  task current: :environment do
+    UffDbLoader.ensure_installation!
+    selected_database = UffDbLoader.current_database_name
+
+    UffDbLoader.log "Active Record connected to: #{ActiveRecord::Base.connection.current_database}"
+    unless selected_database.nil?
+      UffDbLoader.log "Selected database: #{selected_database}"
+    end
+  end
 end
