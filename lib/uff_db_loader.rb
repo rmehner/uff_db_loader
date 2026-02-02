@@ -177,7 +177,13 @@ module UffDbLoader
     end
 
     def restore_command(database_name, result_file_path)
-      config.database_system.restore_command(database_name, result_file_path, config)
+      template = config.restore_command_template || config.database_system.restore_command_template
+      command = config.local_restore_command_path || config.database_system.default_restore_command
+
+      template
+        .gsub("%command%", command)
+        .gsub("%database%", database_name)
+        .gsub("%file%", result_file_path)
     end
 
     def database_name_template(old_database_name)
