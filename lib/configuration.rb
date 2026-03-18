@@ -33,10 +33,6 @@ module UffDbLoader
       @restore_command_template = nil
     end
 
-    def database
-      db_name || ssh_user
-    end
-
     def database_system
       case db_system.to_sym
       when :postgresql

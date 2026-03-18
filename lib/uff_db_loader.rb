@@ -145,9 +145,29 @@ module UffDbLoader
 
     def container_name(environment)
       return "#{config.app_name}_#{environment}_db" if config.container_name.blank?
-      return config.container_name unless config.container_name.respond_to? :call
 
-      config.container_name.call(config.app_name, environment)
+      resolve_dynamic_setting(config.container_name, environment)
+    end
+
+    def ssh_user(environment)
+      resolve_dynamic_setting(config.ssh_user, environment)
+    end
+
+    def ssh_host(environment)
+      resolve_dynamic_setting(config.ssh_host, environment)
+    end
+
+    def database_name(environment)
+      database_name = resolve_dynamic_setting(config.db_name, environment)
+      return database_name if database_name.present?
+
+      ssh_user(environment)
+    end
+
+    def resolve_dynamic_setting(setting, environment)
+      return setting unless setting.respond_to? :call
+
+      setting.call(config.app_name, environment)
     end
 
     def initializer_template_path
@@ -169,9 +189,9 @@ module UffDbLoader
       config
         .database_system
         .dump_command_template
-        .gsub("%host%", config.ssh_host)
-        .gsub("%user%", config.ssh_user)
-        .gsub("%database%", config.database)
+        .gsub("%host%", ssh_host(environment))
+        .gsub("%user%", ssh_user(environment))
+        .gsub("%database%", database_name(environment))
         .gsub("%target%", target)
         .gsub("%container_name%", container_name(environment))
     end
