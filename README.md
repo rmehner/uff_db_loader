@@ -31,9 +31,9 @@ You can configure the gem by running the following during the initialization of 
 ```ruby
 UffDbLoader.configure do |config|
   config.environments = ['staging', 'production']
-  config.ssh_user = 'Francina'
-  config.ssh_host = 'host.of.yoursite'
-  config.db_name = 'twotter'
+  config.ssh_user = ->(_app_name, environment) { environment == 'production' ? 'Francina' : 'FrancinaStaging' } # It accepts a static string too.
+  config.ssh_host = ->(_app_name, environment) { "#{environment}.host.of.yoursite" } # It accepts a static string too.
+  config.db_name = ->(app_name, environment) { "#{app_name}_#{environment}" } # Defaults to ssh_user. It accepts a static string too.
   config.db_system = :postgresql # Possible values are 'postgresql' and 'mysql'.
   config.app_name = 'my_app' # Defaults to the Rails app name
   config.dumps_directory = '/path/to/dumps' # Defaults to Rails.root.join('dumps')
