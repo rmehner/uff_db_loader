@@ -23,6 +23,51 @@ RSpec.describe UffDbLoader do
       UffDbLoader.connect_to_default_database
     end
   end
+
+  describe "uff_db_loader:load" do
+    around do |example|
+      original_application = Rake.application
+
+      Rake.application = Rake::Application.new
+      Rake::Task.define_task(:environment)
+      load File.expand_path("../lib/uff_db_loader/tasks/uff_db_loader.rake", __dir__)
+
+      example.run
+    ensure
+      Rake.application = original_application
+    end
+
+    before do
+      UffDbLoader.reset
+      UffDbLoader.configure do |config|
+        config.environments = ["staging"]
+      end
+    end
+
+    it "reconnects to the default database before loading the dump" do
+      prompt = instance_double(TTY::Prompt, select: "staging")
+      events = []
+
+      allow(TTY::Prompt).to receive(:new).and_return(prompt)
+      allow(UffDbLoader).to receive(:ensure_installation!)
+      allow(UffDbLoader).to receive(:dump_from).with("staging").and_return("/tmp/uff_db_loader_staging_2026_07_09_11_49_38.dump")
+      allow(UffDbLoader).to receive(:connect_to_default_database) { events << :connect_to_default_database }
+      allow(UffDbLoader).to receive(:load_dump_into_database) { |database_name|
+        events << [:load_dump_into_database, database_name]
+      }
+      allow(UffDbLoader).to receive(:log)
+
+      Rake::Task["uff_db_loader:load"].invoke
+
+      expect(events).to eq(
+        [
+          :connect_to_default_database,
+          [:load_dump_into_database, "uff_db_loader_staging_2026_07_09_11_49_38"]
+        ]
+      )
+    end
+  end
+
   describe "configure" do
     before { UffDbLoader.reset }
 
