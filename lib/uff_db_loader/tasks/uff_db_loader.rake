@@ -63,6 +63,7 @@ namespace :uff_db_loader do
     UffDbLoader.log "🤓 Reading from #{result_file_path}"
 
     database_name = File.basename(result_file_path, ".*")
+    UffDbLoader.connect_to_default_database
     UffDbLoader.load_dump_into_database(database_name)
   end
 
