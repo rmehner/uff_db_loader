@@ -63,7 +63,7 @@ namespace :uff_db_loader do
     UffDbLoader.ensure_valid_environment!(environment)
     result_file_path = UffDbLoader.dump_from(environment)
 
-    UffDbLoader.log "🤓 Reading from to #{result_file_path}"
+    UffDbLoader.log "🤓 Reading from #{result_file_path}"
 
     database_name = File.basename(result_file_path, ".*")
     UffDbLoader.load_dump_into_database(database_name)
