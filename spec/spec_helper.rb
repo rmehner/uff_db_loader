@@ -1,4 +1,6 @@
 require "bundler/setup"
+require "active_record"
+require "rake"
 require "uff_db_loader"
 
 RSpec.configure do |config|

@@ -3,6 +3,26 @@ RSpec.describe UffDbLoader do
     expect(UffDbLoader::VERSION).not_to be nil
   end
 
+  describe ".connect_to_default_database" do
+    it "clears the selected database and reconnects to the development configuration" do
+      development_config = {"database" => "uff_db_loader_development"}
+
+      stub_const(
+        "Rails",
+        double(
+          configuration: double(
+            database_configuration: {"development" => development_config}
+          )
+        )
+      )
+
+      expect(UffDbLoader).to receive(:remember_database_name).with("").ordered
+      expect(ActiveRecord::Base).to receive(:remove_connection).ordered
+      expect(ActiveRecord::Base).to receive(:establish_connection).with(development_config).ordered
+
+      UffDbLoader.connect_to_default_database
+    end
+  end
   describe "configure" do
     before { UffDbLoader.reset }
 
