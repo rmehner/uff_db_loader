@@ -3,28 +3,15 @@ RSpec.describe UffDbLoader do
     expect(UffDbLoader::VERSION).not_to be nil
   end
 
-  describe ".connect_to_default_database" do
-    it "clears the selected database and reconnects to the development configuration" do
-      development_config = {"database" => "uff_db_loader_development"}
-
-      stub_const(
-        "Rails",
-        double(
-          configuration: double(
-            database_configuration: {"development" => development_config}
-          )
-        )
-      )
-
-      expect(UffDbLoader).to receive(:remember_database_name).with("").ordered
-      expect(ActiveRecord::Base).to receive(:remove_connection).ordered
-      expect(ActiveRecord::Base).to receive(:establish_connection).with(development_config).ordered
-
-      UffDbLoader.connect_to_default_database
-    end
-  end
-
   describe "uff_db_loader:load" do
+    let(:rails_root) { Pathname.new(Dir.mktmpdir) }
+    let(:rails_configuration) do
+      Struct.new(:database_configuration).new(
+        {"development" => {"database" => "uff_db_loader_development"}}
+      )
+    end
+    let(:rails_application) { Struct.new(:root, :configuration).new(rails_root, rails_configuration) }
+
     around do |example|
       original_application = Rake.application
 
@@ -38,33 +25,55 @@ RSpec.describe UffDbLoader do
     end
 
     before do
+      FileUtils.mkdir_p(rails_root.join("tmp"))
+      stub_const("Rails", rails_application)
+      allow(ActiveRecord::Base).to receive(:remove_connection)
+      allow(ActiveRecord::Base).to receive(:establish_connection)
+      allow(ActiveRecord::Base).to receive(:connection)
+
       UffDbLoader.reset
       UffDbLoader.configure do |config|
         config.environments = ["staging"]
       end
     end
 
-    it "reconnects to the default database before loading the dump" do
+    after do
+      FileUtils.rm_rf(rails_root)
+    end
+
+    it "loads the fresh dump after clearing a stale selected database" do
       prompt = instance_double(TTY::Prompt, select: "staging")
-      events = []
+      loaded_database_name = nil
+
+      UffDbLoader.remember_database_name("uff_db_loader_staging_2026_04_29_23_10_33")
 
       allow(TTY::Prompt).to receive(:new).and_return(prompt)
       allow(UffDbLoader).to receive(:ensure_installation!)
       allow(UffDbLoader).to receive(:dump_from).with("staging").and_return("/tmp/uff_db_loader_staging_2026_07_09_11_49_38.dump")
-      allow(UffDbLoader).to receive(:connect_to_default_database) { events << :connect_to_default_database }
       allow(UffDbLoader).to receive(:load_dump_into_database) { |database_name|
-        events << [:load_dump_into_database, database_name]
+        expect(UffDbLoader.current_database_name).to be_nil
+
+        loaded_database_name = database_name
       }
       allow(UffDbLoader).to receive(:log)
 
       Rake::Task["uff_db_loader:load"].invoke
 
-      expect(events).to eq(
-        [
-          :connect_to_default_database,
-          [:load_dump_into_database, "uff_db_loader_staging_2026_07_09_11_49_38"]
-        ]
+      expect(loaded_database_name).to eq("uff_db_loader_staging_2026_07_09_11_49_38")
+    end
+
+    it "does not create a dump when the default database is missing" do
+      allow(UffDbLoader).to receive(:ensure_installation!)
+      allow(UffDbLoader).to receive(:dump_from)
+      allow(ActiveRecord::Base).to receive(:connection).and_raise(
+        ActiveRecord::NoDatabaseError.new("database does not exist")
       )
+
+      expect do
+        Rake::Task["uff_db_loader:load"].invoke
+      end.to raise_error UffDbLoader::DefaultDatabaseNotFoundError
+
+      expect(UffDbLoader).not_to have_received(:dump_from)
     end
   end
 

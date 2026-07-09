@@ -54,6 +54,7 @@ namespace :uff_db_loader do
   desc "Dumps a remote database from a selected environment to #{UffDbLoader.config.dumps_directory}, then restores and selects the database"
   task load: :environment do
     UffDbLoader.ensure_installation!
+    UffDbLoader.connect_to_default_database
 
     prompt = TTY::Prompt.new
     environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments, filter: true)
@@ -63,7 +64,6 @@ namespace :uff_db_loader do
     UffDbLoader.log "🤓 Reading from #{result_file_path}"
 
     database_name = File.basename(result_file_path, ".*")
-    UffDbLoader.connect_to_default_database
     UffDbLoader.load_dump_into_database(database_name)
   end
 

@@ -9,6 +9,8 @@ module UffDbLoader
   TIMESTAMP_FORMAT = "%Y_%m_%d_%H_%M_%S"
   TIMESTAMP_LENGTH = Time.now.strftime(TIMESTAMP_FORMAT).size
 
+  class DefaultDatabaseNotFoundError < StandardError; end
+
   class << self
     def config
       @configuration ||= Configuration.new
@@ -31,10 +33,18 @@ module UffDbLoader
     end
 
     def connect_to_default_database
-      # switch to default db so we can restore the currently connected database (or the currently selected database might have been pruned)
+      database_config = Rails.configuration.database_configuration["development"]
+
+      # Switch away from a selected dump database before drop/create operations.
       remember_database_name("")
       ActiveRecord::Base.remove_connection
-      ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration["development"])
+      ActiveRecord::Base.establish_connection(database_config)
+      ActiveRecord::Base.connection
+    rescue ActiveRecord::NoDatabaseError
+      database_name = database_config["database"].inspect
+
+      raise DefaultDatabaseNotFoundError,
+        "Default local database #{database_name} does not exist. Run `bin/rails db:create` before using UffDbLoader."
     end
 
     def dump_from(environment)
