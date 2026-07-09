@@ -29,10 +29,7 @@ namespace :uff_db_loader do
   task restore: :environment do
     UffDbLoader.ensure_installation!
 
-    # switch to default db so we can restore the currently connected database
-    UffDbLoader.remember_database_name("")
-    ActiveRecord::Base.remove_connection
-    ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration["development"])
+    UffDbLoader.connect_to_default_database
 
     prompt = TTY::Prompt.new
     database_name = prompt.select("Which dump should be restored?", UffDbLoader.dumps, filter: true)
