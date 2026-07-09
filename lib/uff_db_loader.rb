@@ -30,6 +30,13 @@ module UffDbLoader
       system("bin/rails restart")
     end
 
+    def connect_to_default_database
+      # switch to default db so we can restore the currently connected database (or the currently selected database might have been pruned)
+      remember_database_name("")
+      ActiveRecord::Base.remove_connection
+      ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration["development"])
+    end
+
     def dump_from(environment)
       FileUtils.mkdir_p(config.dumps_directory)
 
