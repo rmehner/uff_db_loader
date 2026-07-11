@@ -1,9 +1,4 @@
 require "bundler/setup"
-require "active_record"
-require "fileutils"
-require "pathname"
-require "rake"
-require "tmpdir"
 require "uff_db_loader"
 
 RSpec.configure do |config|
