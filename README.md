@@ -57,7 +57,7 @@ Make sure the app's database user has the superuser role. Otherwise the app will
 - `switch`: Selects a restored local database to use
 - `switch_to_default`: Switches database back to the default development database
 - `load`: Dumps a remote database from a selected environment and downloads it then restores and selects the database
-- `prune`: Delete all downloaded db dumps and removes all databases created by UffDbLoader
+- `prune`: Delete all downloaded db dumps and removes all databases created by UffDbLoader. Pass a number of days to only prune dumps and databases older than that, e.g. `bin/rails "uff_db_loader:prune[7]"` prunes everything older than 7 days
 - `current`: Shows the currently connected database and the one UffDbLoader has selected
 
 ## Development
