@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "time"
 require "uff_db_loader/version"
 require "configuration"
 
@@ -68,10 +69,18 @@ module UffDbLoader
       end
     end
 
-    def prune_dump_directory
-      FileUtils.rm_f(
-        FileList["#{config.dumps_directory}/*"].exclude(dump_file_path(current_database_name)).to_a
-      )
+    def prune_dump_directory(max_age = nil)
+      files = FileList["#{config.dumps_directory}/*"].exclude(dump_file_path(current_database_name)).to_a
+      files = files.select { |file| older_than?(File.basename(file, ".*"), max_age) } if max_age
+
+      FileUtils.rm_f(files)
+    end
+
+    def older_than?(name, max_age)
+      timestamp = name.to_s[-TIMESTAMP_LENGTH..]
+      Time.strptime(timestamp, TIMESTAMP_FORMAT) < (Time.now - max_age)
+    rescue ArgumentError, TypeError
+      false
     end
 
     def create_database(database_name)

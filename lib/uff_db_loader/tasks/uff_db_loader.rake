@@ -20,7 +20,8 @@ namespace :uff_db_loader do
   desc "Dumps a remote database from a selected environment to #{UffDbLoader.config.dumps_directory}"
   task dump: :environment do
     prompt = TTY::Prompt.new
-    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments, filter: true)
+    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments,
+      filter: true)
     UffDbLoader.ensure_valid_environment!(environment)
     UffDbLoader.dump_from(environment)
   end
@@ -57,7 +58,8 @@ namespace :uff_db_loader do
     UffDbLoader.connect_to_default_database
 
     prompt = TTY::Prompt.new
-    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments, filter: true)
+    environment = prompt.select("Which environment should we get the dump from?", UffDbLoader.config.environments,
+      filter: true)
     UffDbLoader.ensure_valid_environment!(environment)
     result_file_path = UffDbLoader.dump_from(environment)
 
@@ -67,17 +69,20 @@ namespace :uff_db_loader do
     UffDbLoader.load_dump_into_database(database_name)
   end
 
-  desc "Delete all downloaded db dumps and removes all databases created by UffDbLoader"
-  task prune: :environment do
+  desc "Delete downloaded db dumps and databases created by UffDbLoader. Pass a number of days (e.g. prune[7]) to only prune those older than that."
+  task :prune, [:older_than_days] => :environment do |_task, args|
+    max_age = args[:older_than_days] && (args[:older_than_days].to_i * 24 * 60 * 60)
+
     UffDbLoader.databases.each do |database_name|
       next if database_name == ActiveRecord::Base.connection.current_database
+      next if max_age && !UffDbLoader.older_than?(database_name, max_age)
 
       UffDbLoader.log "Dropping #{database_name}"
       UffDbLoader.drop_database(database_name)
     end
 
     UffDbLoader.log "Removing dumps from #{UffDbLoader.config.dumps_directory}"
-    UffDbLoader.prune_dump_directory
+    UffDbLoader.prune_dump_directory(max_age)
   end
 
   desc "Switch back to default database"
@@ -94,8 +99,6 @@ namespace :uff_db_loader do
     selected_database = UffDbLoader.current_database_name
 
     UffDbLoader.log "Active Record connected to: #{ActiveRecord::Base.connection.current_database}"
-    unless selected_database.nil?
-      UffDbLoader.log "Selected database: #{selected_database}"
-    end
+    UffDbLoader.log "Selected database: #{selected_database}" unless selected_database.nil?
   end
 end

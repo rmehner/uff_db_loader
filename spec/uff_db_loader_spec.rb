@@ -78,4 +78,23 @@ RSpec.describe UffDbLoader do
       expect(UffDbLoader.send(:database_name, "sandbox")).to eq "deploy-user"
     end
   end
+
+  describe "older_than?" do
+    let(:a_day) { 24 * 60 * 60 }
+    let(:seven_days) { 7 * a_day }
+    let(:old_name) { "uff_db_loader_staging_#{(Time.now - 10 * a_day).strftime(UffDbLoader::TIMESTAMP_FORMAT)}" }
+    let(:fresh_name) { "uff_db_loader_staging_#{Time.now.strftime(UffDbLoader::TIMESTAMP_FORMAT)}" }
+
+    it "is true when the embedded timestamp is older than the max age" do
+      expect(UffDbLoader.older_than?(old_name, seven_days)).to be true
+    end
+
+    it "is false when the embedded timestamp is within the max age" do
+      expect(UffDbLoader.older_than?(fresh_name, seven_days)).to be false
+    end
+
+    it "is false when the name has no parseable timestamp" do
+      expect(UffDbLoader.older_than?("some_manually_created_database", seven_days)).to be false
+    end
+  end
 end
